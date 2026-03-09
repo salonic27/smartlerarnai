@@ -1,6 +1,9 @@
 streamlit
 google-generativeai
 opeanai
-pandas
-numpy
-pillow
+Flask==3.0.0
+Flask-CORS==4.0.0
+google-generativeai==0.3.2
+requests==2.31.0
+gtts==2.5.1
+python-dotenv==1.0.0
