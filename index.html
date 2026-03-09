@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Learn AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Smart Learn AI</h1>
+            <p>Your multimodal learning assistant</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('text')">Text Explanation</button>
+            <button class="tab-btn" onclick="switchTab('code')">Code Generator</button>
+            <button class="tab-btn" onclick="switchTab('audio')">Audio Lesson</button>
+            <button class="tab-btn" onclick="switchTab('image')">Visual Diagram</button>
+        </div>
+
+        <!-- Text Tab -->
+        <div id="text" class="card active">
+            <h2>Text Explanation</h2>
+            <input type="text" id="text-topic" placeholder="e.g., Backpropagation">
+            <select id="text-depth">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate" selected>Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select>
+            <button class="action-btn" onclick="generateText()">Generate Explanation</button>
+            <div id="text-loading" class="loading">Generating text...</div>
+            <div id="text-result" class="result-area"></div>
+        </div>
+
+        <!-- Code Tab -->
+        <div id="code" class="card">
+            <h2>Code Generator</h2>
+            <input type="text" id="code-algo" placeholder="e.g., Neural Network">
+            <select id="code-complexity">
+                <option value="basic">Basic</option>
+                <option value="advanced">Advanced</option>
+            </select>
+            <button class="action-btn" onclick="generateCode()">Generate Code</button>
+            <div id="code-loading" class="loading">Writing code...</div>
+            <div id="code-result" class="result-area"></div>
+        </div>
+
+        <!-- Audio Tab -->
+        <div id="audio" class="card">
+            <h2>Audio Lesson</h2>
+            <input type="text" id="audio-topic" placeholder="e.g., Introduction to AI">
+            <button class="action-btn" onclick="generateAudio()">Generate Audio</button>
+            <div id="audio-loading" class="loading">Recording audio...</div>
+            <div id="audio-result" class="result-area"></div>
+        </div>
+
+        <!-- Image Tab -->
+        <div id="image" class="card">
+            <h2>Visual Diagram</h2>
+            <input type="text" id="img-concept" placeholder="e.g., CNN Architecture">
+            <input type="text" id="img-style" placeholder="e.g., Technical, Blueprints">
+            <button class="action-btn" onclick="generateImage()">Generate Image</button>
+            <div id="img-loading" class="loading">Drawing diagram...</div>
+            <div id="img-result" class="result-area"></div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        async function callApi(endpoint, data, loadingId, resultId) {
+            document.getElementById(loadingId).style.display = 'block';
+            document.getElementById(resultId).innerHTML = '';
+            
+            try {
+                const response = await fetch(`/api/${endpoint}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const json = await response.json();
+                
+                if (json.status === 'success') {
+                    document.getElementById(resultId).innerHTML = json.data;
+                } else {
+                    document.getElementById(resultId).innerHTML = `<p style="color:red">Error: ${json.message}</p>`;
+                }
+            } catch (e) {
+                document.getElementById(resultId).innerHTML = `<p style="color:red">Network Error</p>`;
+            } finally {
+                document.getElementById(loadingId).style.display = 'none';
+            }
+        }
+
+        function generateText() {
+            const topic = document.getElementById('text-topic').value;
+            const depth = document.getElementById('text-depth').value;
+            if(!topic) { alert('Please enter a topic'); return; }
+            callApi('explain', {topic, depth}, 'text-loading', 'text-result');
+        }
+
+        function generateCode() {
+            const algo = document.getElementById('code-algo').value;
+            const complexity = document.getElementById('code-complexity').value;
+            if(!algo) { alert('Please enter an algorithm'); return; }
+            callApi('code', {algorithm: algo, complexity}, 'code-loading', 'code-result');
+        }
+
+        function generateAudio() {
+            const topic = document.getElementById('audio-topic').value;
+            if(!topic) { alert('Please enter a topic'); return; }
+            callApi('audio', {topic}, 'audio-loading', 'audio-result');
+        }
+
+        function generateImage() {
+            const concept = document.getElementById('img-concept').value;
+            const style = document.getElementById('img-style').value;
+            if(!concept) { alert('Please enter a concept'); return; }
+            callApi('image', {concept, style}, 'img-loading', 'img
