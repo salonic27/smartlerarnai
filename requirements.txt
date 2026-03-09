@@ -1,0 +1,6 @@
+streamlit
+google-generativeai
+opeanai
+pandas
+numpy
+pillow
