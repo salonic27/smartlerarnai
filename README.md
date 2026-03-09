@@ -12,20 +12,6 @@ Copy code
 pip install -r requirements.txt
 Setup Environment:
 
-bash
-
-Copy code
-cp .env.example .env
-# Edit .env with your API keys or set DEMO_MODE=true
-Run the app:
-
-bash
-
-Copy code
-
-python app.py
-Open http://localhost:5000 in your browser.
-
 📋 Features
 Text Explanation: AI-generated markdown guides.
 Code Generator: Python code with Colab links.
