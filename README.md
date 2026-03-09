@@ -6,14 +6,6 @@ Copy code
 
 A generative-AI-powered Machine Learning learning assistant providing multimodal learning (Text, Code, Audio, Image).
 
-## 🚀 Quick Start
-
-1. **Clone the repo:**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/smart-learn-ai.git
-   cd smart-learn-ai
-Install dependencies:
-
 bash
 
 Copy code
